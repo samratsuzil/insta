@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import React, { useState } from "react";
 import CreatableSelect from "react-select/creatable";
 import UserDetail from "./components/UserDetail";
@@ -31,6 +30,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-4 p-6 max-w-xl mx-auto">
+      IG Handles:
       <CreatableSelect
         isClearable
         placeholder="Type handle and press tab to add other"
@@ -38,14 +38,12 @@ export default function Home() {
         isMulti
         onChange={(newValue) => setIgHandles(newValue)}
       />
-
       {/* <button
           className="btn bg-green-600 shadow-lg py-2 px-1 text-white"
           onClick={() => {}}
         >
           Fetch
         </button> */}
-
       {igHandles && (
         <div className="flex flex-col">
           {igHandles?.map((igHandleOtion: any) => (
