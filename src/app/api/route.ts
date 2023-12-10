@@ -1,9 +1,15 @@
 import axios from "axios";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const username = searchParams.get("username");
+
+  if (!username)
+    return NextResponse.json(
+      { error: "No username provided" },
+      { status: 500 }
+    );
 
   const data = await axios
     .get(
@@ -19,18 +25,18 @@ export async function GET(req: NextRequest) {
 
   const user = data?.data?.user;
 
-  if (!!user)
+  if (!user)
     return Response.json(
-      { user: user },
-      {
-        status: 200,
-      }
-    );
-  else
-    return Response.json(
-      { error: "Couldn't fetch" },
+      { error: data },
       {
         status: 404,
       }
     );
+
+  return Response.json(
+    { user: user },
+    {
+      status: 200,
+    }
+  );
 }
