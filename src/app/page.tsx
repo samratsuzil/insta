@@ -3,6 +3,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import CreatableSelect from "react-select/creatable";
+import UserDetail from "./components/UserDetail";
 
 interface Option {
   readonly label: string;
@@ -10,38 +11,49 @@ interface Option {
 }
 
 export default function Home() {
-  const [value, setValue] = useState<any | null>();
+  const [igHandles, setIgHandles] = useState<
+    Option[] | [] | null | readonly never[]
+  >();
+  // const [fetchedResults, setFetchedResults] = useState<any>([]);
 
-  const [fetchedResults, setFetchedResults] = useState<any>([]);
+  // const onSubmit = async () => {
+  //   const userNames = igHandles?.map((value: Option) => value.value);
+  //   setFetchedResults([]);
 
-  const onSubmit = async () => {
-    await fetch(`/api/followers?username=${value[0].value}`,).then((resp) => resp.json()).then(data=>{setFetchedResults([data])});
-  };
+  //   userNames?.map((username: string) => {
+  //     fetch(`/api/?username=${username}`)
+  //       .then((resp) => resp.json())
+  //       .then((data) => {
+  //         setFetchedResults(data);
+  //       });
+  //   });
+  // };
 
   return (
     <>
       <div className="flex flex-col gap-4 max-w-sm p-6 mx-auto">
-        {JSON.stringify(value)}
         <CreatableSelect
           isClearable
           placeholder="Type handle and press tab to add other"
           options={[]}
           isMulti
-          onChange={(newValue) => setValue(newValue)}
+          onChange={(newValue) => setIgHandles(newValue)}
         />
 
         <button
           className="btn bg-green-600 shadow-lg py-2 px-1 text-white"
-          onClick={() => onSubmit()}
+          onClick={() => {}}
         >
           Fetch
         </button>
 
-        <div>
-          List
-          {/* {fetchedResults?.map((fetchedResult) => ( */}
-            <>{JSON.stringify(fetchedResults)}</>
-          {/* ))} */}
+        <div className="flex flex-col">
+          {igHandles?.map((igHandleOtion: any) => (
+            <UserDetail
+              username={igHandleOtion.value}
+              key={igHandleOtion.value}
+            />
+          ))}
         </div>
       </div>
     </>
