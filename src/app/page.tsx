@@ -30,23 +30,23 @@ export default function Home() {
   // };
 
   return (
-    <>
-      <div className="flex flex-col gap-4 max-w-sm p-6 mx-auto">
-        <CreatableSelect
-          isClearable
-          placeholder="Type handle and press tab to add other"
-          options={[]}
-          isMulti
-          onChange={(newValue) => setIgHandles(newValue)}
-        />
+    <div className="flex flex-col gap-4 p-6 max-w-xl mx-auto">
+      <CreatableSelect
+        isClearable
+        placeholder="Type handle and press tab to add other"
+        options={[]}
+        isMulti
+        onChange={(newValue) => setIgHandles(newValue)}
+      />
 
-        <button
+      {/* <button
           className="btn bg-green-600 shadow-lg py-2 px-1 text-white"
           onClick={() => {}}
         >
           Fetch
-        </button>
+        </button> */}
 
+      {igHandles && (
         <div className="flex flex-col">
           {igHandles?.map((igHandleOtion: any) => (
             <UserDetail
@@ -55,7 +55,7 @@ export default function Home() {
             />
           ))}
         </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 }
