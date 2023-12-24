@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
           edge_followed_by_count: user.edge_followed_by.count,
         };
       } else {
-        errResp = `${res.statusText} Internal Server Error`;
+        errResp = `${JSON.stringify(res)} Internal Server Error`;
       }
     })
     .catch((err) => {
