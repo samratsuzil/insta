@@ -167,6 +167,7 @@ export default function Home() {
             <button
               className="flex btn bg-blue-600 shadow-lg py-2 px-10 text-white w-lg disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={() => {
+                setIgHandles([]);
                 setFetchedResults([]);
               }}
               disabled={fetchedResults.length == 0}
