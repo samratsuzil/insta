@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import CreatableSelect from "react-select/creatable";
-import UserDetail from "./components/UserDetail";
 import { AgGridReact } from "ag-grid-react";
 import StatsCard from "./components/StatsCard";
 
@@ -11,24 +10,73 @@ interface Option {
   readonly value: string;
 }
 
+const dummyData = [
+  {
+    user: {
+      username: "angeli123",
+      full_name: "Angelina Jolie",
+      edge_follow_count: 100,
+      edge_followed_by_count: 1000,
+      profile_pic_url: "",
+    },
+    error: null,
+  },
+  {
+    user: {
+      username: "jack12",
+      full_name: "Jack Ritcher",
+      edge_follow_count: 200,
+      edge_followed_by_count: 2000,
+      profile_pic_url: "",
+    },
+    error: null,
+  },
+  {
+    user: {
+      username: "Winson",
+      full_name: "Winson Coster",
+      edge_follow_count: 300,
+      edge_followed_by_count: 3000,
+      profile_pic_url: "",
+    },
+    error: null,
+  },
+];
+
 export default function Home() {
   const defaultColDef = useMemo(() => {
     return {
-      filter: "agTextColumnFilter",
+      sortable: false,
+      filter: false,
     };
   }, []);
 
   const colDefs = [
-    { field: "full_name", headerName: "Full Name", filter: true },
-    { field: "username", headerName: "Username" },
-    { field: "edge_follow_count", headerName: "Following" },
-    { field: "edge_followed_by_count", headerName: "Followed By" },
+    {
+      field: "username",
+      headerName: "Username",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "full_name",
+      headerName: "Full Name",
+      filter: "agTextColumnFilter",
+    },
+    {
+      field: "edge_follow_count",
+      headerName: "Following",
+    },
+    {
+      field: "edge_followed_by_count",
+      headerName: "Followed By",
+      sortable: true,
+    },
     { field: "profile_pic_url", headerName: "Profile" },
   ];
 
   const [igHandles, setIgHandles] = useState<
-    Option[] | [] | null | readonly never[]
-  >();
+    Option[] | [] | null | readonly Option[]
+  >([]);
   const [fetchedResults, setFetchedResults] = useState<any>([]);
 
   const onSubmit = async () => {
@@ -48,30 +96,20 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col gap-4 p-6 max-w-6xl mx-auto">
+    <div className="flex flex-col gap-10 p-6 max-w-6xl mx-auto">
       <div className="flex gap-10">
         <div className="flex flex-1 flex-col gap-4">
-          <h1 className="text-4xl ">Handles</h1>
+          <h1 className="text-4xl ">IG Handles</h1>
           <CreatableSelect
             isClearable
             placeholder="Type handle and press tab to add other"
             options={[]}
+            value={igHandles}
             isMulti
             onChange={(newValue) => setIgHandles(newValue)}
           />
-          {/* <pre>
-        {" "}
-        Fetched :{" "}
-        {JSON.stringify(
-          fetchedResults?.map(
-            (fetchedResult: any) => fetchedResult.error != null
-          ).length,
-          null,
-          2
-        )}
-      </pre> */}
           <button
-            className="btn bg-green-600 shadow-lg py-2 px-1 text-white"
+            className="btn bg-green-600 shadow-lg py-2 px-1 text-white max-w-xs"
             onClick={() => {
               onSubmit();
             }}
@@ -84,7 +122,7 @@ export default function Home() {
           <div className="grid gap-4 sm:grid-cols-3">
             <StatsCard
               type="info"
-              title="Total Requests"
+              title="Total"
               count={fetchedResults?.length}
             />
             <StatsCard
@@ -110,9 +148,36 @@ export default function Home() {
       </div>
 
       <div className="flex flex-1 flex-col gap-4">
-        <h1 className="text-4xl ">Results</h1>
+        <div className="flex gap-10 w-full justify-between">
+          <h1 className="text-4xl">
+            {fetchedResults == dummyData ? "Sample " : ""} Results
+          </h1>
+
+          <div className="flex flex-1 flex-row-reverse gap-4 w-full">
+            <button
+              className="flex btn bg-blue-600 shadow-lg py-2 px-10 text-white w-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => {
+                setFetchedResults(dummyData);
+              }}
+              disabled={fetchedResults == dummyData}
+            >
+              Show Dummy Data
+            </button>
+
+            <button
+              className="flex btn bg-blue-600 shadow-lg py-2 px-10 text-white w-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => {
+                setFetchedResults([]);
+              }}
+              disabled={fetchedResults.length == 0}
+            >
+              Reset
+            </button>
+          </div>
+        </div>
         <div className="h-[800px]">
           <AgGridReact
+            className="ag-theme-quartz"
             rowData={
               fetchedResults?.map(
                 (fetchedResult: any) => fetchedResult?.user

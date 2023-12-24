@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
       { status: 500 }
     );
 
-  const response = await axios
+  await axios
     .get(
       `https://www.instagram.com/api/v1/users/web_profile_info/?username=${username}`,
       {
